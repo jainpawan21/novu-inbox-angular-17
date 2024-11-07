@@ -1,14 +1,30 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NovuUI } from '@novu/js/ui';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrl: './app.component.css',
 })
-export class AppComponent {
-  title = 'ng17-novu-project';
+export class AppComponent implements AfterViewInit {
+  @ViewChild('notificationInbox') notificationInbox!: ElementRef<HTMLElement>;
+  title = 'inbox-angular';
+
+  ngAfterViewInit() {
+    const novu = new NovuUI({
+      options: {
+        applicationIdentifier: 'appID',
+        subscriberId: 'subID',
+      },
+    });
+
+    novu.mountComponent({
+      name: 'Inbox',
+      props: {},
+      element: this.notificationInbox.nativeElement,
+    });
+  }
 }
